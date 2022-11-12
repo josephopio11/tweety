@@ -19,8 +19,12 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::post('/tweet', [TweetController::class, 'store'])->name('tweet.store');
+Route::middleware(['auth'])->group(function () {
 
-Route::get('/dashboard', [HomeController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
+    Route::get('/tweet', [TweetController::class, 'index'])->name('dashboard');
+    Route::post('/tweet', [TweetController::class, 'store'])->name('tweet.store');
+
+    Route::redirect('/dashboard', '/tweet', 301);
+});
 
 require __DIR__.'/auth.php';

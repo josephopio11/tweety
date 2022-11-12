@@ -3,10 +3,11 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Models\Tweet;
+use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
@@ -59,7 +60,17 @@ class User extends Authenticatable
 
     public function timeline()
     {
-        return Tweet::where('user_id', $this->id)->latest()->get();
+        $ids = $this->follows()->pluck('id');
+        $ids->push($this->id);
+
+        return Tweet::whereIn('user_id', $ids)
+            ->orWhere('user_id', $this->id)
+            ->latest()->get();
+    }
+
+    public function follow(User $user)
+    {
+        return $this->follows()->save($user);
     }
 
     public function follows()

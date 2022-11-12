@@ -63,7 +63,7 @@
                                 x-cloak x-show="reportsOpen" x-collapse x-collapse.duration.500ms>
                                 {{ $tweet->body }}
                             </div>
-                            <div class="flex flex-row mt-2">
+                            <div class="flex flex-row mt-2 text-sm">
                                 <div class="flex flex-col flex-auto">
 
                                     <div class="mt-1 text-gray-400 text-xxs" title="34k Downlaods in this year">
